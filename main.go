@@ -4,11 +4,12 @@
 package main
 
 import(
+  "runtime"
   "fmt"
   "gopkg.in/alecthomas/kingpin.v2"
-  _"github.com/agiratech/goTextSearch/algorithm"
+  "github.com/agiratech/goTextSearch/config"
   "github.com/agiratech/goTextSearch/data_groups"
-  "github.com/agiratech/goTextSearch/db_connection"
+  _"github.com/agiratech/goTextSearch/algorithm"
 )
 
 // get input from command line and store it in variables
@@ -19,9 +20,15 @@ var (
 
 
 func main() {
+  // use all CPU cores
+  runtime.GOMAXPROCS(runtime.NumCPU())
+
   // Set configuration values
+  config.InitConfig()
+
   // connect to database
-  db_connection.InitDb()
+  data_groups.InitDb()
+
   kingpin.Parse()
   data_groups.BrandClassification(*brand)
   fmt.Printf("%v, %s\n", *brand, *name)

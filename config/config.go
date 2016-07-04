@@ -1,11 +1,10 @@
-package db_connection
+package config
 
 import (
   "log"
   "io/ioutil"
   "path/filepath"
   "gopkg.in/yaml.v2"
-  // "os"
 )
 
 var App Config
@@ -25,7 +24,7 @@ type Database struct{
 
 // To initialize configuration
 func InitConfig(){
-  path, err := filepath.Abs("db_connection/config.yml")
+  path, err := filepath.Abs("./config/application.yml")
   source, err := ioutil.ReadFile(path)
   if err != nil{
     log.Fatal(err)
