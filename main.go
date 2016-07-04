@@ -31,12 +31,13 @@ func main() {
   ProductInfo = &ProductData
   config.InitDb()
   kingpin.Parse()
+  Common.ProductTargetString = "tênis adidas superstar foundation"
+  Common.ProductSourceString = "tênis adidas originals superstar foundation - masculino"
   ProductInfo.TargetName = *name
   ProductInfo.TargetBrand = *brand
   data_groups.BrandClassification(ProductInfo)
   fmt.Printf("%v, %s\n%v", *brand, *name,ProductInfo)
-  Common.ProductTargetString = "tênis adidas superstar foundation"
-  Common.ProductSourceString = "tênis adidas originals superstar foundation - masculino"
-  result := algorithm.Levenshtein(Common)
-  fmt.Println(result)
+  algorithm.GetMatchedText(ProductInfo,&Common)
+  // result := algorithm.Levenshtein(Common)
+  // fmt.Println(result)
 }
