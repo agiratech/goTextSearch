@@ -3,19 +3,21 @@ package config
 import (
   "log"
   "fmt"
-  "github.com/jinzhu/gorm"
-  _ "github.com/jinzhu/gorm/dialects/postgres"
-
+  "database/sql"
+_ "github.com/lib/pq"
+  "gopkg.in/gorp.v1"
 )
 
 // Gorp Implementation
-var Db *gorm.DB
+var Dbmap *gorp.DbMap
+var Db *sql.DB
 var err error
 
 func InitDb() {
-  Db, err = gorm.Open("postgres", getFormat())
+  Db, err = sql.Open("postgres", getFormat())
   checkErr(err, "sql.Open failed")
   fmt.Println("db connected",Db)
+  Dbmap = &gorp.DbMap{Db: Db, Dialect: gorp.PostgresDialect{}}
 }
 
  func checkErr(err error, msg string) {
