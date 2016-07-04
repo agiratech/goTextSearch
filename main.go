@@ -5,6 +5,7 @@ package main
 
 import( "fmt"
         "gopkg.in/alecthomas/kingpin.v2"
+        _"github.com/agiratech/goTextSearch/algorithm"
       )
 
 // get input from command line and store it in variables
