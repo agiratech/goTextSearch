@@ -22,6 +22,10 @@ var Common common_struct.ProductLev
 var ProductInfo *common_struct.ProductInfo
 // main function
 func main() {
+  var source [3]string
+  source[0] = "tênis adidas originals superstar foundation - masculino"
+  source[1] = "Tênis adidas Courtvantage Low - Masculino"
+  source[2] = "Tênis adidas Falcon Elite 5 - Feminino"
   // use all CPU cores
   runtime.GOMAXPROCS(runtime.NumCPU())
   // Set configuration values
@@ -38,6 +42,12 @@ func main() {
   data_groups.BrandClassification(ProductInfo)
   fmt.Printf("%v, %s\n%v", *brand, *name,ProductInfo)
   algorithm.GetMatchedText(ProductInfo,&Common)
-  // result := algorithm.Levenshtein(Common)
+  result := algorithm.Levenshtein(Common)
   // fmt.Println(result)
+  // for l := range source{
+  //   Common.ProductTargetString = "tênis adidas superstar foundation"
+  //   Common.ProductSourceString = source[l]
+  //   result := algorithm.Levenshtein(Common)
+  // }
+  fmt.Println(result)
 }
