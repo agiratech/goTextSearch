@@ -6,7 +6,7 @@ import (
   "github.com/agiratech/goTextSearch/common_struct"
 )
 
-func BrandClassification(addrProductInfo common_struct.ProductInfo){
+func BrandClassification(addrProductInfo *common_struct.ProductInfo){
   query := `SELECT
     COALESCE(PROD.retailer_product_configuration_id, 0) AS retailer_prod_conf_id,
     COALESCE(to_char(OCC.imported_at, 'YYYYMMDD'), '') AS date,

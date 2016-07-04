@@ -20,8 +20,6 @@ var (
 )
 
 var ProductInfo *common_struct.ProductInfo
-var ProductData common_struct.ProductInfo
-
 // main function
 func main() {
   // use all CPU cores
@@ -29,12 +27,12 @@ func main() {
   // Set configuration values
   config.InitConfig()
   // connect to database
+  var ProductData common_struct.ProductInfo
+  ProductInfo = &ProductData
   config.InitDb()
   kingpin.Parse()
-
-  ProductData.TargetName = *name
-  ProductData.TargetBrand = *brand
-  data_groups.BrandClassification(ProductData)
-
-  fmt.Printf("%v, %s\n", *brand, *name)
+  ProductInfo.TargetName = *name
+  ProductInfo.TargetBrand = *brand
+  data_groups.BrandClassification(ProductInfo)
+  fmt.Printf("%v, %s\n%v", *brand, *name,ProductInfo)
 }
