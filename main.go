@@ -27,7 +27,7 @@ func main() {
   config.InitConfig()
 
   // connect to database
-  data_groups.InitDb()
+  config.InitDb()
 
   kingpin.Parse()
   data_groups.BrandClassification(*brand)
