@@ -35,3 +35,12 @@ type ProductInfo struct {
   TargetBrand string
   Products []ProductsData
 }
+
+type ProductLev struct {
+  ProductSourceString string
+  ProductTargetString string
+}
+
+type ProductLevString struct {
+  ProductLevName string
+}

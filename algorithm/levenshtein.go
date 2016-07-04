@@ -1,26 +1,29 @@
-package main
+package algorithm
 
 import (
   "strings"
-  "fmt"
-
+  // "fmt"
+  "github.com/agiratech/goTextSearch/common_struct"
 )
-func main(){
-  var a1, a2 string
-  a1 = "tênis adidas superstar foundation"
-  a2 = "tênis adidas originals superstar foundation - masculino"
-  result := Levenshtein(a1,a2)
-  fmt.Println(result)
-}
+
+
+// func main(){
+//   var Common common_struct.ProductLev
+//   // var a1, a2 string
+//   Common.ProductTargetString = "tênis adidas superstar foundation"
+//   Common.ProductSourceString = "tênis adidas originals superstar foundation - masculino"
+//   result := Levenshtein(Common)
+//   fmt.Println(result)
+// }
 // using levenshtein algorithm to compare two string,
 // The string is matched return string
 // Not matched avoid the string
-func Levenshtein(a1 string, a2 string) string {
+func Levenshtein(str common_struct.ProductLev) common_struct.ProductLevString {
+  var re_str common_struct.ProductLevString
   var count int = 0
   var match_count int = 0
-  var title string
-  input_word := strings.Split(a1, " ")
-  db_word := strings.Split(a2, " ")
+  input_word := strings.Split(str.ProductTargetString, " ")
+  db_word := strings.Split(str.ProductSourceString, " ")
   for i := range input_word {
     count += 1
     word_lenth := len(input_word[i])
@@ -39,11 +42,11 @@ func Levenshtein(a1 string, a2 string) string {
   }
 }
   if count == match_count{
-    title = "best-" + a2
+    re_str.ProductLevName = "best-" + str.ProductSourceString
   }else if match_count >= 2{
-    title = "average-" + a2
+    re_str.ProductLevName = "average-" + str.ProductSourceString
   }else{
-    title = "worst-" + a2
+    re_str.ProductLevName = "worst-" + str.ProductSourceString
   }
-return title
+return re_str
 }

@@ -1,9 +1,10 @@
 package algorithm
 
-import ( "github.com/agiratech/goTextSearch/common_struct"
-       )
+// import (
+//         _"github.com/agiratech/goTextSearch/common_struct"
+//        )
 
-func (p *ProductInfo) GroupByPriority() {
+// func (p *ProductInfo) GroupByPriority() {
 
-}
+// }
 
