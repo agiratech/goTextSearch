@@ -11,6 +11,7 @@ import(
   "github.com/agiratech/goTextSearch/data_groups"
   "github.com/agiratech/goTextSearch/algorithm"
   "github.com/agiratech/goTextSearch/common_struct"
+  "strings"
 )
 
 // get input from command line and store it in variables
@@ -35,8 +36,8 @@ func main() {
   ProductInfo = &ProductData
   config.InitDb()
   kingpin.Parse()
-  Common.ProductTargetString = "tênis adidas superstar foundation"
-  Common.ProductSourceString = "tênis adidas originals superstar foundation - masculino"
+  Common.ProductTargetString = strings.ToLower("TÊNIS GONEW ALASCA")
+  // Common.ProductSourceString = "Tênis adidas originals superstar foundation - masculino"
   ProductInfo.TargetName = *name
   ProductInfo.TargetBrand = *brand
   data_groups.BrandClassification(ProductInfo)

@@ -21,7 +21,7 @@ func BrandClassification(addrProductInfo *common_struct.ProductInfo){
     COALESCE(PRO_DET.model_number, '') AS model_number,
     COALESCE(PRO_DET.product_code, '') AS product_code,
     COALESCE(PRO_DET.sku_code, '') AS sku_code,
-    COALESCE(PROD.title, '') AS product_name,
+    LOWER(COALESCE(PROD.title, '')) AS product_name,
     regexp_replace(COALESCE(PROD.description, ''), E'[\n\r]+', ' ', 'g' ) AS product_description,
     COALESCE(PRO_DET.barcode, '') AS barcode,
     COALESCE(PRO_DET.color, '') AS color,

@@ -50,3 +50,4 @@ type PriorityQueue struct {
   MediumPriority []ProductsData
   LowPriority []ProductsData
 }
+
