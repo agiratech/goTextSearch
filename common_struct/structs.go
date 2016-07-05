@@ -44,3 +44,9 @@ type ProductLev struct {
 type ProductLevString struct {
   ProductLevName string
 }
+
+type PriorityQueue struct {
+  HighPriority []ProductsData
+  MediumPriority []ProductsData
+  LowPriority []ProductsData
+}

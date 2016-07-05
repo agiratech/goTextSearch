@@ -5,7 +5,7 @@ package main
 
 import(
   "runtime"
-  "fmt"
+  _"fmt"
   "gopkg.in/alecthomas/kingpin.v2"
   "github.com/agiratech/goTextSearch/config"
   "github.com/agiratech/goTextSearch/data_groups"
@@ -40,14 +40,7 @@ func main() {
   ProductInfo.TargetName = *name
   ProductInfo.TargetBrand = *brand
   data_groups.BrandClassification(ProductInfo)
-  fmt.Printf("%v, %s\n%v", *brand, *name,ProductInfo)
+  // fmt.Printf("%v, %s\n%v", *brand, *name,ProductInfo)
   algorithm.GetMatchedText(ProductInfo,&Common)
-  result := algorithm.Levenshtein(Common)
   // fmt.Println(result)
-  // for l := range source{
-  //   Common.ProductTargetString = "tênis adidas superstar foundation"
-  //   Common.ProductSourceString = source[l]
-  //   result := algorithm.Levenshtein(Common)
-  // }
-  fmt.Println(result)
 }

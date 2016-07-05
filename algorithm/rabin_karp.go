@@ -1,7 +1,7 @@
 package algorithm
 
 import (
-        "fmt"
+        _"fmt"
         "github.com/agiratech/goTextSearch/common_struct"
         "strings"
        )
@@ -16,9 +16,10 @@ type TextDetail struct {
 
 var target_word,source_word string
 var product common_struct.ProductsData
-var text_detail TextDetail
+var priority_queue common_struct.PriorityQueue
+var percentage float64
 func GroupByPriority(p *common_struct.ProductInfo,pl *common_struct.ProductLev) {
-  text_detail.TargetWords= strings.Split(pl.ProductTargetString," ")
+  text_detail := &TextDetail{TargetWords:strings.Split(pl.ProductTargetString," ")}
   for _,product = range p.Products {
     text_detail.SourceWords = strings.Split(product.ProductName," ")
     text_detail.TargentNameLen = 0
@@ -32,11 +33,24 @@ func GroupByPriority(p *common_struct.ProductInfo,pl *common_struct.ProductLev) 
         }
       }
     }
-    // ((len(text_detail.MatchedStr) /text_detail.TargentNameLen)*100)
-    fmt.Println(len(text_detail.MatchedStr),text_detail.TargentNameLen)
-    // text_detail.GetPercentage()
-    text_detail.MatchedStr = nil
-    text_detail.SourceWords = nil
-    text_detail.MatchedStr = nil
+  text_detail.GetPercentage(product)
   }
+}
+
+
+func (text_detail *TextDetail) GetPercentage(product common_struct.ProductsData) {
+  percentage = ((float64(len(text_detail.MatchedStr))) / float64(len(text_detail.TargetWords)))*100
+  switch {
+    case percentage <= 75: priority_queue.HighPriority = append(priority_queue.HighPriority,product)
+                           break;
+    case (percentage > 75 && percentage <= 25 ): priority_queue.MediumPriority = append(priority_queue.MediumPriority,product)
+                           break;
+    case percentage > 25: priority_queue.LowPriority = append(priority_queue.LowPriority,product)
+                           break;
+
+  }
+  PriorityQueue = &priority_queue
+  text_detail.MatchedStr = nil
+  text_detail.SourceWords = nil
+  text_detail.MatchedStr = nil
 }
