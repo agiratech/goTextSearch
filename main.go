@@ -5,13 +5,16 @@ package main
 
 import(
   "runtime"
-  _"fmt"
+  "fmt"
   "gopkg.in/alecthomas/kingpin.v2"
   "github.com/agiratech/goTextSearch/config"
   "github.com/agiratech/goTextSearch/data_groups"
   "github.com/agiratech/goTextSearch/algorithm"
   "github.com/agiratech/goTextSearch/common_struct"
   "strings"
+  "net/http"
+  "encoding/json"
+
 )
 
 // get input from command line and store it in variables
@@ -21,6 +24,8 @@ var (
 )
 var Common common_struct.ProductLev
 var ProductInfo *common_struct.ProductInfo
+var ReturnValue *common_struct.PriorityQueue
+var ProductLevName string
 // main function
 func main() {
   var source [3]string
@@ -36,12 +41,28 @@ func main() {
   ProductInfo = &ProductData
   config.InitDb()
   kingpin.Parse()
-  Common.ProductTargetString = strings.ToLower("TÊNIS GONEW ALASCA")
+  Common.ProductTargetString = strings.ToLower("tênis adidas lk trainer cf synth - infantil")
   // Common.ProductSourceString = "Tênis adidas originals superstar foundation - masculino"
   ProductInfo.TargetName = *name
   ProductInfo.TargetBrand = *brand
   data_groups.BrandClassification(ProductInfo)
-  // fmt.Printf("%v, %s\n%v", *brand, *name,ProductInfo)
-  algorithm.GetMatchedText(ProductInfo,&Common)
-  // fmt.Println(result)
+  fmt.Printf("%v, %s\n%v", *brand, *name,ProductInfo)
+  ReturnValue = algorithm.GetMatchedText(ProductInfo,&Common)
+  recommend, err := json.Marshal(ReturnValue)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    ProductLevName = string(recommend)
+    http.HandleFunc("/v2", handler)
+    http.ListenAndServe(":8080", nil)
+
+}
+
+
+func handler(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json; charset=utf-8")
+    // w.Header().Del("Transfer-Encoding")
+    // w.WriteHeader(http.StatusCreated)
+    fmt.Fprintf(w, ProductLevName, r.URL.Path[2:])
 }

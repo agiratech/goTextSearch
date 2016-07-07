@@ -1,5 +1,5 @@
 database:
   username: postgres
-  password: postgres
+  password: root
   port: 5432
-  database: retail_dash_development
+  database: retaildash_test1

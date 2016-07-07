@@ -3,7 +3,7 @@ package algorithm
 import (
         "github.com/agiratech/goTextSearch/common_struct"
         "fmt"
-       )
+         )
 
 type TextDetail struct {
   TargentNameLen int
@@ -14,20 +14,14 @@ type TextDetail struct {
 }
 
 var RecommendedProducts,PriorityQueue *common_struct.PriorityQueue
-
-func GetMatchedText(p *common_struct.ProductInfo,pl *common_struct.ProductLev) {
+var Recommend_product *common_struct.PriorityQueue
+func GetMatchedText(p *common_struct.ProductInfo,pl *common_struct.ProductLev) (*common_struct.PriorityQueue) {
   GroupByPriority(p,pl)
   Levenshtein(pl.ProductTargetString)
   fmt.Println(len(RecommendedProducts.HighPriority), len(RecommendedProducts.MediumPriority),len(RecommendedProducts.LowPriority))
 
-  for _,a := range RecommendedProducts.HighPriority {
-    fmt.Println(a.ProductName,"  High")
-  }
-  for _,b := range RecommendedProducts.MediumPriority {
-    fmt.Println(b.ProductName,"  Medium")
-  }
-  for _,c := range RecommendedProducts.LowPriority {
-    fmt.Println(c.ProductName,"  Low")
-  }
+   Recommend_product = &common_struct.PriorityQueue {HighPriority: RecommendedProducts.HighPriority ,MediumPriority: RecommendedProducts.MediumPriority, LowPriority: RecommendedProducts.LowPriority}
+  return Recommend_product
+
 }
 
