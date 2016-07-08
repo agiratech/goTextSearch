@@ -33,9 +33,9 @@ func GroupByPriority(p *common_struct.ProductInfo,pl *common_struct.ProductLev) 
 func (text_detail *TextDetail) GetPercentage(product common_struct.ProductsData) {
   percentage = ((float64(len(text_detail.MatchedStr))) / float64(len(text_detail.TargetWords)))*100
   switch {
-    case percentage >= 75: priority_queue.HighPriority = append(priority_queue.HighPriority,product)
+    case percentage >= 60: priority_queue.HighPriority = append(priority_queue.HighPriority,product)
                            break;
-    case (percentage < 75 && percentage >= 25 ): priority_queue.MediumPriority = append(priority_queue.MediumPriority,product)
+    case (percentage < 60 && percentage >= 25 ): priority_queue.MediumPriority = append(priority_queue.MediumPriority,product)
                            break;
     case percentage < 25: priority_queue.LowPriority = append(priority_queue.LowPriority,product)
                            break;
