@@ -12,9 +12,11 @@ import(
   "github.com/agiratech/goTextSearch/algorithm"
   "github.com/agiratech/goTextSearch/common_struct"
   "strings"
-  "net/http"
-  "encoding/json"
-
+  // "net/http"
+  // "encoding/json"
+  "github.com/gin-gonic/gin"
+  "github.com/itsjamie/gin-cors"
+  "time"
 )
 
 // get input from command line and store it in variables
@@ -26,6 +28,7 @@ var Common common_struct.ProductLev
 var ProductInfo *common_struct.ProductInfo
 var ReturnValue *common_struct.PriorityQueue
 var ProductLevName string
+// var shopperType Shopper
 // main function
 func main() {
   var source [3]string
@@ -48,21 +51,40 @@ func main() {
   data_groups.BrandClassification(ProductInfo)
   fmt.Printf("%v, %s\n%v", *brand, *name,ProductInfo)
   ReturnValue = algorithm.GetMatchedText(ProductInfo,&Common)
-  recommend, err := json.Marshal(ReturnValue)
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
-    ProductLevName = string(recommend)
-    http.HandleFunc("/v2", handler)
-    http.ListenAndServe(":8080", nil)
+  // recommend, err := json.Marshal(ReturnValue)
+  //   if err != nil {
+  //       fmt.Println(err)
+  //       return
+  //   }
+
+
+
+    // ProductLevName = string(recommend)
+    // http.HandleFunc("/v2", handler)
+    // http.ListenAndServe(":8080", nil)
+    route := gin.Default()
+    route.Use(cors.Middleware(cors.Config{
+    Origins:        "*",
+    Methods:        "GET, PUT, POST, DELETE",
+    RequestHeaders: "Origin, Authorization, Content-Type",
+    ExposedHeaders: "",
+    MaxAge: 50 * time.Second,
+    Credentials: true,
+    ValidateHeaders: false,
+  }))
+    route.GET("/v2",handler)
+    route.Run(":8080")
 
 }
 
 
-func handler(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json; charset=utf-8")
-    // w.Header().Del("Transfer-Encoding")
-    // w.WriteHeader(http.StatusCreated)
-    fmt.Fprintf(w, ProductLevName, r.URL.Path[2:])
+// func handler(w http.ResponseWriter, r *http.Request) {
+//     w.Header().Set("Content-Type", "application/json; charset=utf-8")
+//     // w.Header().Set("Vary","Origin")
+//     // w.Header().Set("Access-Control-Allow-Origin","*")
+//     // w.WriteHeader(http.StatusCreated)
+//     fmt.Fprintf(w, ProductLevName,"")
+// }
+func handler(server *gin.Context) {
+  server.JSON(200, gin.H{"priorities": ReturnValue})
 }
