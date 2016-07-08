@@ -33,6 +33,7 @@ type ProductsData struct{
 type ProductInfo struct {
   TargetName string
   TargetBrand string
+  TargetColor string
   Products []ProductsData
 }
 

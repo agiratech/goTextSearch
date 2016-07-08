@@ -1,7 +1,7 @@
 package data_groups
 
 import (
-  _"fmt"
+  "fmt"
   "github.com/agiratech/goTextSearch/config"
   "github.com/agiratech/goTextSearch/common_struct"
 )
@@ -39,7 +39,7 @@ func BrandClassification(addrProductInfo *common_struct.ProductInfo){
     JOIN product_details AS PRO_DET ON PRO_DET.id = OCC.product_detail_id
     JOIN products AS PROD ON PROD.id = PRO_DET.product_id
     JOIN retailers AS RET ON RET.id = PROD.retailer_id
-    where PROD.brand LIKE $1`
-  _, _ = config.Dbmap.Select(&addrProductInfo.Products, query, addrProductInfo.TargetBrand)
-   // return addrProductInfo
+    where LOWER(PROD.brand) LIKE $1 AND LOWER(PRO_DET.color) LIKE $2`
+  _, _ = config.Dbmap.Select(&addrProductInfo.Products, query, addrProductInfo.TargetBrand, addrProductInfo.TargetColor)
+  fmt.Println("brand classification",addrProductInfo.Products)
 }

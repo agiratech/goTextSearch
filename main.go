@@ -5,65 +5,32 @@ package main
 
 import(
   "runtime"
-  "fmt"
-  "gopkg.in/alecthomas/kingpin.v2"
+  // "fmt"
   "github.com/agiratech/goTextSearch/config"
   "github.com/agiratech/goTextSearch/data_groups"
   "github.com/agiratech/goTextSearch/algorithm"
   "github.com/agiratech/goTextSearch/common_struct"
   "strings"
-  // "net/http"
-  // "encoding/json"
   "github.com/gin-gonic/gin"
   "github.com/itsjamie/gin-cors"
   "time"
 )
 
-// get input from command line and store it in variables
-var (
-  brand = kingpin.Arg("brand", "Brand Name.").Required().String()
-  name  = kingpin.Arg("name", "Name of product.").Required().String()
-)
 var Common common_struct.ProductLev
 var ProductInfo *common_struct.ProductInfo
 var ReturnValue *common_struct.PriorityQueue
 var ProductLevName string
-// var shopperType Shopper
+
 // main function
 func main() {
-  var source [3]string
-  source[0] = "tênis adidas originals superstar foundation - masculino"
-  source[1] = "Tênis adidas Courtvantage Low - Masculino"
-  source[2] = "Tênis adidas Falcon Elite 5 - Feminino"
   // use all CPU cores
   runtime.GOMAXPROCS(runtime.NumCPU())
   // Set configuration values
   config.InitConfig()
   // connect to database
-  var ProductData common_struct.ProductInfo
-  ProductInfo = &ProductData
   config.InitDb()
-  kingpin.Parse()
-  Common.ProductTargetString = strings.ToLower("tênis adidas lk trainer cf synth - infantil")
-  // Common.ProductSourceString = "Tênis adidas originals superstar foundation - masculino"
-  ProductInfo.TargetName = *name
-  ProductInfo.TargetBrand = *brand
-  data_groups.BrandClassification(ProductInfo)
-  fmt.Printf("%v, %s\n%v", *brand, *name,ProductInfo)
-  ReturnValue = algorithm.GetMatchedText(ProductInfo,&Common)
-  // recommend, err := json.Marshal(ReturnValue)
-  //   if err != nil {
-  //       fmt.Println(err)
-  //       return
-  //   }
-
-
-
-    // ProductLevName = string(recommend)
-    // http.HandleFunc("/v2", handler)
-    // http.ListenAndServe(":8080", nil)
-    route := gin.Default()
-    route.Use(cors.Middleware(cors.Config{
+  route := gin.Default()
+  route.Use(cors.Middleware(cors.Config{
     Origins:        "*",
     Methods:        "GET, PUT, POST, DELETE",
     RequestHeaders: "Origin, Authorization, Content-Type",
@@ -72,19 +39,26 @@ func main() {
     Credentials: true,
     ValidateHeaders: false,
   }))
-    route.GET("/v2",handler)
-    route.Run(":8080")
-
+  route.GET("/v2",handler)
+  route.Run(":8001")
 }
 
-
-// func handler(w http.ResponseWriter, r *http.Request) {
-//     w.Header().Set("Content-Type", "application/json; charset=utf-8")
-//     // w.Header().Set("Vary","Origin")
-//     // w.Header().Set("Access-Control-Allow-Origin","*")
-//     // w.WriteHeader(http.StatusCreated)
-//     fmt.Fprintf(w, ProductLevName,"")
-// }
 func handler(server *gin.Context) {
+  brand := server.Query("brand")
+  title := server.Query("title")
+  color := server.Query("color")
+  ReturnValue = GetProductInfo(brand, color, title)
   server.JSON(200, gin.H{"priorities": ReturnValue})
+}
+
+func GetProductInfo(brand string, color string, title string) *common_struct.PriorityQueue {
+  var ProductData common_struct.ProductInfo
+  ProductInfo = &ProductData
+  Common.ProductTargetString = strings.ToLower(title)
+  ProductInfo.TargetName = title
+  ProductInfo.TargetBrand = strings.ToLower(brand)
+  ProductInfo.TargetColor = strings.ToLower(color)
+  data_groups.BrandClassification(ProductInfo)
+  ReturnValue = algorithm.GetMatchedText(ProductInfo,&Common)
+  return ReturnValue
 }
